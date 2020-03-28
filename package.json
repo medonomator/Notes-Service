@@ -1,0 +1,48 @@
+{
+  "name": "notes-service",
+  "version": "0.0.1",
+  "description": "Notes service",
+  "main": "app.js",
+  "scripts": {
+    "test": "rm -rf ./dist && NODE_PATH=../../ ./node_modules/.bin/jest -i --coverage --silent",
+    "start": "NODE_PATH=../../:./node_modules ./node_modules/.bin/ts-node index.ts",
+    "build": "rm -rf ./dist && NODE_PATH=../../ ./node_modules/.bin/tsc",
+    "dev": "pm2 start ecosystem.config.js && pm2 logs",
+    "test:watch": "jest -i --coverage --watchAll"
+  },
+  "keywords": [],
+  "author": "Dmitry Zorins",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.3",
+    "@types/express-boom": "^3.0.0",
+    "@hapi/joi": "^17.1.1",
+    "@types/joi": "^14.3.4",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^13.1.2",
+    "@types/pg": "^7.14.3",
+    "ts-jest": "^25.2.1",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-boom": "^3.0.0",
+    "express-joi-validation": "^4.0.3",
+    "jest": "^25.2.3",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.18.2",
+    "pg-hstore": "^2.3.3",
+    "pino": "^5.17.0",
+    "pino-pretty": "^3.6.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "<rootDir>/(build|config|node_modules)/"
+    ]
+  }
+}
