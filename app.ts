@@ -37,8 +37,9 @@ app.use(async (req: IParams, res, next) => {
 
       if (isBlock) {
         res.boom.unauthorized('Your session is expired');
+      } else {
+        next();
       }
-      next();
     } catch (error) {
       logger.error(error.message);
       next(error);

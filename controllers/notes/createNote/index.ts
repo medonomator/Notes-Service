@@ -3,7 +3,6 @@ import { IResCreateNote } from './interfaces';
 import { BASE_URL } from '../../../constants';
 import { pgQuery } from '../../../database/connection';
 import * as uuid from 'uuid';
-import { redisClient } from '../../../database/redis';
 /**
  * Create new Note
  * @param title

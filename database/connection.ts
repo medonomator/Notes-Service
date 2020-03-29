@@ -46,10 +46,15 @@ const notes = `CREATE TABLE IF NOT EXISTS
   }
 })();
 
-export const pgQuery = async (text: string, values: string[]) => {
+export const pgQuery = async (text: string, values?: string[]) => {
   try {
     const result = await pg.query(text, values);
-    return result.rows[0];
+
+    if (result.rows.length > 1) {
+      return result.rows;
+    } else {
+      return result.rows[0];
+    }
   } catch (error) {
     logger.error(error.message);
     throw new Error(error.message);
