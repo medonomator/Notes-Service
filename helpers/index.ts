@@ -4,7 +4,7 @@ import { TOKEN_SIGN_KEY, REFRESH_TOKEN_SIGN_KEY, SECRET_KEY } from '../constants
 import { ITokens, IPrepareTokensParams } from '../interfaces';
 
 export const prepareTokens = (obj: IPrepareTokensParams): ITokens => {
-  const tokenExpirationSeconds = 60 * 10; // 10 minute
+  const tokenExpirationSeconds = 60 * 60 * 24; // 1 day for test
   const refreshTokenExpirationSeconds = 60 * 60 * 24 * 7; // week
 
   return {

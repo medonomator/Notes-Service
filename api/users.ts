@@ -6,7 +6,7 @@ const validator = require('express-joi-validation').createValidator({ passError:
 
 const router = express.Router();
 
-router.post('/createUser', validator.body(createUserSchema), async (req: Request, res: Response) => {
+router.post('/create-user', validator.body(createUserSchema), async (req: Request, res: Response) => {
   const { login, password } = req.body;
   const result = await createUser(login, password);
 
@@ -16,6 +16,6 @@ router.post('/createUser', validator.body(createUserSchema), async (req: Request
 
   res.send(result);
 });
-router.post('/unloginUser', unloginUser);
+router.post('/unlogin-user', unloginUser);
 
 export default router;

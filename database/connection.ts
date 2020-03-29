@@ -24,14 +24,26 @@ const users = `CREATE TABLE IF NOT EXISTS
 
 const notes = `CREATE TABLE IF NOT EXISTS
       notes(
-        id SERIAL PRIMARY KEY,
+        id uuid PRIMARY KEY,
         title VARCHAR(128) NOT NULL,
         share_link VARCHAR(256),
-        isEnableNotes boolean DEFAULT false,
-        body character(1000) NOT NULL,
+        isShareNote boolean DEFAULT false,
+        body text NOT NULL CHECK ( char_length(body) <= 1000 ),
         user_id integer NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id)
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        created_at timestamp  NOT NULL  DEFAULT now(),
+        updated_at timestamp  NOT NULL  DEFAULT now()
       )`;
 
 pg.query(users).catch((err: Error) => logger.error(err));
 pg.query(notes).catch((err: Error) => logger.error(err));
+
+export const pgQuery = async (text: string, values: string[]) => {
+  try {
+    const result = await pg.query(text, values);
+    return result.rows[0];
+  } catch (error) {
+    logger.error(error.message);
+    throw new Error(error.message);
+  }
+};
