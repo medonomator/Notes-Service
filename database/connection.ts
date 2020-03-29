@@ -17,9 +17,11 @@ pg.connect((err: Error) => {
 const users = `CREATE TABLE IF NOT EXISTS
       users(
         id SERIAL PRIMARY KEY,
+        user_id uuid NOT NULL UNIQUE,
         login VARCHAR(128) NOT NULL UNIQUE,
+        isActive boolean DEFAULT true,
         password VARCHAR(128) NOT NULL,
-        refresh_token VARCHAR(215)
+        refresh_token VARCHAR(263)
       )`;
 
 const notes = `CREATE TABLE IF NOT EXISTS
@@ -29,14 +31,20 @@ const notes = `CREATE TABLE IF NOT EXISTS
         share_link VARCHAR(256),
         isShareNote boolean DEFAULT false,
         body text NOT NULL CHECK ( char_length(body) <= 1000 ),
-        user_id integer NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id),
+        user_id uuid NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(user_id),
         created_at timestamp  NOT NULL  DEFAULT now(),
         updated_at timestamp  NOT NULL  DEFAULT now()
       )`;
 
-pg.query(users).catch((err: Error) => logger.error(err));
-pg.query(notes).catch((err: Error) => logger.error(err));
+(async () => {
+  try {
+    await pg.query(users);
+    await pg.query(notes);
+  } catch (error) {
+    logger.error(error);
+  }
+})();
 
 export const pgQuery = async (text: string, values: string[]) => {
   try {

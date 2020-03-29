@@ -1,4 +1,5 @@
 // common interfaces
+import { Request } from 'express';
 
 export interface ITokens {
   token: string;
@@ -9,4 +10,11 @@ export interface ITokens {
 export interface IPrepareTokensParams {
   userId: string;
   login: string;
+}
+
+export interface IParams extends Request {
+  user: {
+    userId: string;
+    login: string;
+  };
 }

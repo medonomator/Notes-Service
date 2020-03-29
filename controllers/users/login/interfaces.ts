@@ -6,7 +6,7 @@ interface IError {
 
 interface IResponse extends ITokens, IError {}
 
-export type IResCreateUser = IResponse | IError;
+export type IResUser = IResponse | IError;
 
 export interface User {
   id: string;

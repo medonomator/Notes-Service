@@ -1,15 +1,10 @@
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import { createNote } from '../controllers/notes/createNote';
 import { noteUserSchema } from './schemas';
+import { IParams } from '../interfaces';
 const validator = require('express-joi-validation').createValidator({ passError: true });
 
 const router = express.Router();
-
-interface IParams extends Request {
-  user: {
-    userId: string;
-  };
-}
 
 router.post('/', validator.body(noteUserSchema), async (req: IParams, res: Response) => {
   const { title, body } = req.body;
@@ -19,10 +14,11 @@ router.post('/', validator.body(noteUserSchema), async (req: IParams, res: Respo
 
   if (result.error) {
     res.boom.badRequest(result.error);
+  } else {
+    res.send(result);
   }
-
-  res.send(result);
 });
+
 router.get('/', () => {});
 router.put('/:id', () => {});
 router.delete('/:id', () => {});

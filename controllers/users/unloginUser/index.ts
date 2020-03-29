@@ -1,37 +1,25 @@
-import * as uuid from 'uuid';
-import Boom from 'boom';
 import { logger } from '../../../helpers/logger';
-// import { encryptData } from '../../../helpers';
-// import { prepareTokens } from '../../../helpers/index';
-import { IParams, IResponse } from './interfaces';
+import { IResponse } from './interfaces';
+import { pgQuery } from '../../../database/connection';
+import { redisClient } from '../../../database/redis';
 /**
- * Create New User
- * @param {IParams} params
- * @return {Promise<IResponse>}>
+ * Unlogin user
+ * @param login
+ * @param password
+ * @return {Promise<IResUser>}>
  */
-export const unloginUser = async (req /*: IParams */): Promise<IResponse | Boom> => {
+export const unloginUser = async (login: string, userId: string): Promise<IResponse> => {
   try {
-    // const { email, password, name } = req.payload;
-    // const oldUser = await users.findOne({ email }).lean();
+    // set block current user
+    await redisClient.set(userId, 'isBlock');
 
-    // if (oldUser) {
-    //   return Boom.badRequest(`the user >>> ${email} <<< is already in the system`);
-    // }
+    const text = 'UPDATE users SET isActive = false, refresh_token = $1 WHERE login = $2 AND user_id = $3';
+    const values = ['empty', login, userId];
+    await pgQuery(text, values);
 
-    // const userId = uuid.v4();
-    // const payload = {
-    //   userId,
-    //   email,
-    //   // password: encryptData(password, email.toLowerCase()),
-    //   name,
-    // };
-
-    // const newUser = await users.create(payload);
-    // logger.info(`NewUser with Email: ${newUser['email']} and Name: ${newUser['name']} was created`);
-    // return prepareTokens(payload);
-    return 'unloginUser' as any;
-  } catch (err) {
-    logger.error(err);
-    return Boom.badImplementation(err.message);
+    return { update: 'ok', error: null };
+  } catch (error) {
+    logger.error(error);
+    return { error: error.message };
   }
 };
