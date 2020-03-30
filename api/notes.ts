@@ -1,50 +1,69 @@
-import express, { Response } from 'express';
+import express from 'express';
 import { createNote } from '../controllers/notes/createNote';
 import { getNotes } from '../controllers/notes/getNotes';
 import { updateNote } from '../controllers/notes/updateNote';
-import { noteUserSchema, noteUpdateSchema } from './schemas';
+import { deleteNote } from '../controllers/notes/deleteNote';
+import { shareNote } from '../controllers/notes/shareNote';
+import { noteUserSchema, noteUpdateSchema, noteShareSchema } from './schemas';
 import { IParams } from '../interfaces';
+import { commonMiddleWare } from '../helpers/middlewares';
 const validator = require('express-joi-validation').createValidator({ passError: true });
 
 const router = express.Router();
 // Create Note
-router.post('/', validator.body(noteUserSchema), async (req: IParams, res: Response) => {
-  const { title, body } = req.body;
-  const { user_id } = req.user;
+router.post(
+  '/',
+  validator.body(noteUserSchema),
+  async (req: IParams, _, next) => {
+    const { title, body } = req.body;
+    const { user_id } = req.user;
 
-  const result = await createNote(title, body, user_id);
-
-  if (result.error) {
-    res.boom.badRequest(result.error);
-  } else {
-    res.send(result);
-  }
-});
+    req.result = await createNote(title, body, user_id);
+    next();
+  },
+  commonMiddleWare,
+);
 // Get Notes
-router.get('/', async (req: IParams, res: Response) => {
-  const { user_id } = req.user;
+router.get(
+  '/',
+  async (req: IParams, _, next) => {
+    req.result = await getNotes(req.user.user_id);
+    next();
+  },
+  commonMiddleWare,
+);
+// Update Note
+router.put(
+  '/',
+  validator.body(noteUpdateSchema),
+  async (req: IParams, _, next) => {
+    req.result = await updateNote({ ...req.body, user_id: req.user.user_id });
+    next();
+  },
+  commonMiddleWare,
+);
 
-  const result: any = await getNotes(user_id);
-  if (result.error) {
-    res.boom.badRequest(result.error);
-  } else {
-    res.send(result);
-  }
-});
-
-router.put('/', validator.body(noteUpdateSchema), async (req: IParams, res: Response) => {
-  const result = await updateNote({ ...req.body, user_id: req.user.user_id });
-
-  if (result.error) {
-    res.boom.badRequest(result.error);
-  } else {
-    res.send(result);
-  }
-});
-
-router.delete('/:id', () => {});
-
-router.put('/share-note', () => {});
+// Delete Note
+router.delete(
+  '/:id',
+  async (req: IParams, _, next) => {
+    req.result = await deleteNote(req.params.id);
+    next();
+  },
+  commonMiddleWare,
+);
+// Share Note
+router.put(
+  '/share-note',
+  validator.body(noteShareSchema),
+  async (req: IParams, _, next) => {
+    const { isShareNote, id } = req.body;
+    req.result = await shareNote(isShareNote, id);
+    next();
+  },
+  commonMiddleWare,
+);
+// Get Share Note
 router.get('/share-note/:id', () => {});
 
 export default router;
