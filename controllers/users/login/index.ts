@@ -14,15 +14,21 @@ export const userLogin = async (login: string, password: string): Promise<IResUs
     const text = 'SELECT * FROM users WHERE login = $1 AND password = $2';
     const values = [login, encryptData(password, login.toLowerCase())];
     const user: User = await pgQuery(text, values);
-    const userId = user.user_id;
+    const { user_id } = user;
+
+    if (!user.is_active) {
+      const text = 'UPDATE users SET is_active = true WHERE login = $1';
+      const values = [login];
+      await pgQuery(text, values);
+    }
 
     if (!user) {
       return { error: 'invalid username or password' };
     }
     // set unBlock current user
-    await redisClient.set(userId, '');
+    await redisClient.set(user_id, '');
 
-    const { token, refreshToken, expiresIn } = prepareTokens({ userId, login });
+    const { token, refreshToken, expiresIn } = prepareTokens({ user_id, login });
 
     return { token, refreshToken, expiresIn, error: null };
   } catch (error) {

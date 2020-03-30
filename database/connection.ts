@@ -19,9 +19,9 @@ const users = `CREATE TABLE IF NOT EXISTS
         id SERIAL PRIMARY KEY,
         user_id uuid NOT NULL UNIQUE,
         login VARCHAR(128) NOT NULL UNIQUE,
-        isActive boolean DEFAULT true,
+        is_active boolean DEFAULT true,
         password VARCHAR(128) NOT NULL,
-        refresh_token VARCHAR(263)
+        refresh_token VARCHAR(264)
       )`;
 
 const notes = `CREATE TABLE IF NOT EXISTS
@@ -29,7 +29,7 @@ const notes = `CREATE TABLE IF NOT EXISTS
         id uuid PRIMARY KEY,
         title VARCHAR(128) NOT NULL,
         share_link VARCHAR(256),
-        isShareNote boolean DEFAULT false,
+        is_share_note boolean DEFAULT false,
         body text NOT NULL CHECK ( char_length(body) <= 1000 ),
         user_id uuid NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(user_id),
@@ -46,7 +46,7 @@ const notes = `CREATE TABLE IF NOT EXISTS
   }
 })();
 
-export const pgQuery = async (text: string, values?: string[]) => {
+export const pgQuery = async (text: string, values?: (string | boolean)[]) => {
   try {
     const result = await pg.query(text, values);
 

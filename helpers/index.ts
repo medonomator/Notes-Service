@@ -10,7 +10,7 @@ export const prepareTokens = (obj: IPrepareTokensParams): ITokens => {
   return {
     token: jwt.sign(
       {
-        userId: obj.userId,
+        user_id: obj.user_id,
         login: obj.login,
         tokenSignKey: TOKEN_SIGN_KEY,
       },
@@ -22,7 +22,7 @@ export const prepareTokens = (obj: IPrepareTokensParams): ITokens => {
     ),
     refreshToken: jwt.sign(
       {
-        userId: obj.userId,
+        user_id: obj.user_id,
         refresh: true,
         tokenSignKey: REFRESH_TOKEN_SIGN_KEY,
       },

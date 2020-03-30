@@ -13,7 +13,7 @@ jest.mock('pg', () => ({
 const getValues = (body: string) => ({
   title: 'title',
   body,
-  userId: 'userId',
+  user_id: 'user_id',
 });
 
 jest.mock('../../../database/connection', () => {

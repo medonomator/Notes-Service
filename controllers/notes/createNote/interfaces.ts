@@ -7,11 +7,11 @@ export interface Note {
   title: string;
   shareLink: string;
   refresh_token: string;
-  isShareNote: boolean;
+  is_share_note: boolean;
   body: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface IResponse extends Note, IError {}

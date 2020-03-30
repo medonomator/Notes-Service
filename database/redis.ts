@@ -8,11 +8,13 @@ redisClient.on('connect', async () => {
   try {
     logger.info('Redis connected');
     // This is stuff in order to if the server crashes then need to restore the cache unlogin users
-    const allUnloginUsers = await pgQuery('SELECT * FROM users WHERE isActive = false');
+    const allUnloginUsers = await pgQuery('SELECT * FROM users WHERE is_active = false');
 
-    allUnloginUsers.forEach(async ({ user_id }) => {
-      await redisClient.set(user_id, 'isBlock');
-    });
+    if (allUnloginUsers) {
+      allUnloginUsers.forEach(async ({ user_id }) => {
+        await redisClient.set(user_id, 'isBlock');
+      });
+    }
   } catch (error) {
     logger.error(error);
   }

@@ -9,3 +9,9 @@ export const noteUserSchema = Joi.object({
   title: Joi.string().required(),
   body: Joi.string().required(),
 });
+
+export const noteUpdateSchema = Joi.object({
+  title: Joi.string().required(),
+  is_share_note: Joi.boolean().required(),
+  body: Joi.string().required(),
+});

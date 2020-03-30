@@ -8,13 +8,13 @@ export interface ITokens {
 }
 
 export interface IPrepareTokensParams {
-  userId: string;
+  user_id: string;
   login: string;
 }
 
 export interface IParams extends Request {
   user: {
-    userId: string;
+    user_id: string;
     login: string;
   };
 }

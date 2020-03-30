@@ -8,13 +8,13 @@ import { redisClient } from '../../../database/redis';
  * @param password
  * @return {Promise<IResUser>}>
  */
-export const unloginUser = async (login: string, userId: string): Promise<IResponse> => {
+export const unloginUser = async (login: string, user_id: string): Promise<IResponse> => {
   try {
     // set block current user
-    await redisClient.set(userId, 'isBlock');
+    await redisClient.set(user_id, 'isBlock');
 
-    const text = 'UPDATE users SET isActive = false, refresh_token = $1 WHERE login = $2 AND user_id = $3';
-    const values = ['empty', login, userId];
+    const text = 'UPDATE users SET is_active = false, refresh_token = $1 WHERE login = $2 AND user_id = $3';
+    const values = ['empty', login, user_id];
     await pgQuery(text, values);
 
     return { update: 'ok', error: null };

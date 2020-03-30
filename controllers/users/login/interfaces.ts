@@ -14,4 +14,5 @@ export interface User {
   password: string;
   refresh_token: string;
   user_id: string;
+  is_active: boolean;
 }

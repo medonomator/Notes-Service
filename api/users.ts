@@ -31,9 +31,9 @@ router.post('/login', validator.body(userSchema), async (req: Request, res: Resp
 });
 
 router.post('/unlogin-user', async (req: IParams, res: Response) => {
-  const { login, userId } = req.user;
+  const { login, user_id } = req.user;
 
-  const result = await unloginUser(login, userId);
+  const result = await unloginUser(login, user_id);
 
   if (result.error) {
     res.boom.badRequest(result.error);
