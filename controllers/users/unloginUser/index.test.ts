@@ -1,4 +1,4 @@
-import { userLogin } from './';
+import { unloginUser } from './';
 
 jest.mock('pg', () => ({
   Pool: jest.fn(() => ({
@@ -10,16 +10,20 @@ jest.mock('pg', () => ({
   })),
 }));
 
-jest.mock('../../../helpers', () => {
+const getValues = (body: string) => ({
+  title: 'title',
+  body,
+  userId: 'userId',
+});
+
+jest.mock('../../../database/connection', () => {
   return {
-    encryptData: jest.fn(() => '1234'),
-    prepareTokens: jest.fn(({ login }) => {
-      if (login === 'test') {
-        return {
-          token: 'token',
-          expiresIn: 600,
-        };
-      } else {
+    pgQuery: jest.fn((query, values) => {
+      if (values[2] === 'body') {
+        return getValues('body');
+      }
+
+      if (values[2] === 'E') {
         throw new Error('Custom Error');
       }
     }),
@@ -27,22 +31,20 @@ jest.mock('../../../helpers', () => {
 });
 
 describe('Testing successful response', () => {
-  test('login successful', async () => {
-    const res = <any>await userLogin('test', '1234');
+  test('create new user', async () => {
+    const res = <any>await unloginUser('test', '1234');
 
-    expect(res).toHaveProperty('token');
-    expect(res).toHaveProperty('refreshToken');
-    expect(res).toHaveProperty('expiresIn');
+    expect(res).toHaveProperty('update');
     expect(res).toHaveProperty('error');
 
-    expect(res.expiresIn).toEqual(600);
+    expect(res.update).toBe('ok');
     expect(res.error).toBe(null);
   });
 });
 
 describe('Error handling', () => {
   test('Error in the creation process', async () => {
-    const res = <any>await userLogin('E', 'E');
+    const res = <any>await unloginUser('E', 'E');
     expect(res).toHaveProperty('error');
     expect(res.error).toEqual('Custom Error');
   });
