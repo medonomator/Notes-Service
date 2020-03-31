@@ -8,7 +8,7 @@
     "start": "NODE_PATH=../../:./node_modules ./node_modules/.bin/ts-node index.ts",
     "build": "rm -rf ./dist && NODE_PATH=../../ ./node_modules/.bin/tsc",
     "dev": "pm2 start ecosystem.config.js && pm2 logs",
-    "test:watch": "jest -i --coverage --watchAll"
+    "test:watch": "jest -i --coverage --watchAll controllers/notes/getNotes/index.test.ts"
   },
   "keywords": [],
   "author": "Dmitry Zorins",

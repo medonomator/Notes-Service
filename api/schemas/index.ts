@@ -11,6 +11,7 @@ export const noteUserSchema = Joi.object({
 });
 
 export const noteUpdateSchema = Joi.object({
+  id: Joi.string().required(),
   title: Joi.string().required(),
   is_share_note: Joi.boolean().required(),
   body: Joi.string().required(),

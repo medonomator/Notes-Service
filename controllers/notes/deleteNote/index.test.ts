@@ -10,12 +10,6 @@ jest.mock('pg', () => ({
   })),
 }));
 
-const getValues = (id: string) => ({
-  title: 'title',
-  id,
-  userId: 'userId',
-});
-
 jest.mock('../../../database/connection', () => {
   return {
     pgQuery: jest.fn((query, values) => {

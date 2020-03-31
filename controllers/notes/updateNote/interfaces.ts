@@ -6,7 +6,7 @@ export interface IParams extends IError {
   title: string;
   is_share_note: boolean;
   body: string;
-  user_id: string;
+  id: string;
 }
 
 export interface INote {

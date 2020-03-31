@@ -10,7 +10,7 @@ export const getNotes = async (user_id: string): Promise<IResponse> => {
   try {
     const text = 'SELECT * FROM notes WHERE user_id = $1';
     const values = [user_id];
-    const notes: INotes[] = await pgQuery(text, values);
+    const notes: INotes[] = (await pgQuery(text, values)) || [];
 
     logger.info(`Get all Notes from ${user_id}`);
 

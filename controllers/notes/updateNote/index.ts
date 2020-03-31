@@ -8,11 +8,11 @@ import { pgQuery } from '../../../database/connection';
  */
 export const updateNote = async (data: IParams): Promise<IResUpdateNote> => {
   try {
-    const { title, is_share_note, body, user_id } = data;
+    const { title, is_share_note, body, id } = data;
     const text =
-      'UPDATE notes SET title = $1, is_share_note = $2, body = $3, updated_at = now() WHERE user_id = $4 RETURNING *';
+      'UPDATE notes SET title = $1, is_share_note = $2, body = $3, updated_at = now() WHERE id = $4 RETURNING *';
 
-    const values = [title, is_share_note, body, user_id];
+    const values = [title, is_share_note, body, id];
     const result = await pgQuery(text, values);
 
     return result;
