@@ -15,8 +15,3 @@ export const noteUpdateSchema = Joi.object({
   is_share_note: Joi.boolean().required(),
   body: Joi.string().required(),
 });
-
-export const noteShareSchema = Joi.object({
-  id: Joi.string().required(),
-  isShareNote: Joi.boolean().required(),
-});

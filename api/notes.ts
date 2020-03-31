@@ -3,9 +3,8 @@ import { createNote } from '../controllers/notes/createNote';
 import { getNotes } from '../controllers/notes/getNotes';
 import { updateNote } from '../controllers/notes/updateNote';
 import { deleteNote } from '../controllers/notes/deleteNote';
-import { shareNote } from '../controllers/notes/shareNote';
 import { getShareNote } from '../controllers/notes/getShareNote';
-import { noteUserSchema, noteUpdateSchema, noteShareSchema } from './schemas';
+import { noteUserSchema, noteUpdateSchema } from './schemas';
 import { IParams, TypeIError } from '../interfaces';
 import { commonMiddleWare } from '../helpers/middlewares';
 const validator = require('express-joi-validation').createValidator({ passError: true });
@@ -48,17 +47,6 @@ router.delete(
   '/:id',
   async (req: IParams<TypeIError>, _, next) => {
     req.result = await deleteNote(req.params.id);
-    next();
-  },
-  commonMiddleWare,
-);
-// Share Note
-router.put(
-  '/share-note',
-  validator.body(noteShareSchema),
-  async (req: IParams<TypeIError>, _, next) => {
-    const { isShareNote, id } = req.body;
-    req.result = await shareNote(isShareNote, id);
     next();
   },
   commonMiddleWare,
