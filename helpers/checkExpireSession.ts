@@ -1,8 +1,8 @@
 import { redisClient } from '../database/redis';
-import { IParams } from '../interfaces';
+import { IParams, TypeIError } from '../interfaces';
 import { logger } from '../helpers/logger';
 
-export const checkExpireSession = async (req: IParams, res, next) => {
+export const checkExpireSession = async (req: IParams<TypeIError>, res, next) => {
   if (req.user) {
     try {
       const { user_id } = req.user;

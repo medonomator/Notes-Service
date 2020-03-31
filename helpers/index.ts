@@ -42,3 +42,8 @@ export const encryptData = (str: string, secretKey = SECRET_KEY) => {
     .update(str)
     .digest('hex');
 };
+
+export const isUuid = (id: string) => {
+  const v4 = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
+  return v4.test(id);
+};

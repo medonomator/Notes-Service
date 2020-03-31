@@ -5,12 +5,12 @@ import expressJwt from 'express-jwt';
 import { logger } from './helpers/logger';
 import { checkExpireSession } from './helpers/checkExpireSession';
 import { PORT, TOKEN_SIGN_KEY } from './constants';
+import { checkIsUuid, errorIsJoi } from './helpers/middlewares';
 // routes
 import userApi from './api/users';
 import notesApi from './api/notes';
 // database connections
 import { pg } from './database/connection';
-
 pg.connect();
 
 const app = express();
@@ -29,20 +29,12 @@ app.use(
 );
 
 app.use(checkExpireSession);
+app.use(checkIsUuid);
 
 app.use('/api', userApi);
 app.use('/api/notes', notesApi);
 
-app.use((err, req, res, next) => {
-  if (err && err.error && err.error.isJoi) {
-    res.boom.badRequest(err.error.toString());
-  } else {
-    if (err.status === 401) {
-      res.boom.unauthorized();
-    }
-    next(err);
-  }
-});
+app.use(errorIsJoi);
 
 app.listen(PORT);
 

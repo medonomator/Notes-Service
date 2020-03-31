@@ -5,6 +5,8 @@ export interface IError {
   error: string | null;
 }
 
+export type TypeIError = IError | string;
+
 export interface ITokens {
   token: string;
   refreshToken: string;
@@ -16,10 +18,10 @@ export interface IPrepareTokensParams {
   login: string;
 }
 
-export interface IParams extends Request {
+export interface IParams<T> extends Request {
   user: {
     user_id: string;
     login: string;
   };
-  result: string | object | IError;
+  result: T;
 }
